@@ -4,11 +4,15 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 export default function Member() {
+  const [name, setName] = useState();
   const [member, setMember] = useState({});
   const [validated, setValidated] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
   const { id } = useParams();
+  let notif;
   const navigate = useNavigate();
 
   if (id) {
@@ -17,6 +21,7 @@ export default function Member() {
         .get("http://localhost:8000/teams/" + id)
         .then((response) => {
           setMember(response.data);
+          setName(response.data.name);
         })
         .catch((error) => {
           console.log(error);
@@ -33,7 +38,7 @@ export default function Member() {
     event.stopPropagation();
 
     setValidated(true);
-    // console.log(event.target);
+    console.log(member);
     let teamMember = {
       name: event.target.name.value,
       email: event.target.email.value,
@@ -48,6 +53,7 @@ export default function Member() {
         })
         .catch((error) => {
           console.log(error);
+          setAlertMessage(error.message ? error.message : "Unknown Error");
         });
     } else {
       axios
@@ -57,19 +63,39 @@ export default function Member() {
         })
         .catch((error) => {
           console.log(error);
+          setAlertMessage(error.message ? error.message : "Unknown Error");
         });
     }
   };
   const handleChange = (e) => {
-    // console.log({[e.target.name] : e.target.value})
-    setMember([e.target.name] = e.target.value);
+    console.log(e.target.name);
+    switch (e.target.name) {
+      case 'name':
+        setName(e.target.value);
+        break;
+    
+      default:
+        setMember({[e.target.name]:e.target.value});
+        break;
+    }
   };
   const handleRoleChange = (e) => {
-    console.log({'isAdmin' : e.target.value})
-    setMember({'isAdmin' : e.target.value});
+    console.log({ isAdmin: e.target.value });
+    setMember({ isAdmin: e.target.value });
   };
+  if (alertMessage) {
+    notif = (
+      <Alert key={"danger"} variant={"danger"}>
+        {alertMessage}
+      </Alert>
+    );
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 2500);
+  }
   return (
     <div className="m-4">
+      {notif}
       <Button
         size="sm"
         variant="outline-dark"
@@ -92,7 +118,7 @@ export default function Member() {
           <Form.Control
             type="text"
             name="name"
-            value={member.name}
+            value={name}
             required
             onChange={handleChange}
           />
@@ -122,13 +148,13 @@ export default function Member() {
         <Form.Group className="mb-3" controlId="exampleForm.email">
           <Form.Label>Role</Form.Label>
           <div key={`default-radio`} className="mb-3">
-            <Form.Check // prettier-ignore
+            <Form.Check
               type="radio"
               inline
               id="1"
               name="isAdmin"
               value={1}
-              checked={'1' == member.isAdmin}
+              checked={"1" == member.isAdmin}
               onChange={handleRoleChange}
               label={`Admin - Can delete members`}
             />
@@ -138,7 +164,7 @@ export default function Member() {
               inline
               id="0"
               value={0}
-              checked={'1' != member.isAdmin}
+              checked={"1" != member.isAdmin}
               onChange={handleRoleChange}
               label={`Regular - Can't delete members`}
               name="isAdmin"
