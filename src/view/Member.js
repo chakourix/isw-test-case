@@ -33,11 +33,13 @@ export default function Member() {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+      setAlertMessage('Some fields are required');
+      setValidated(true);
+      return;
     }
     event.preventDefault();
     event.stopPropagation();
 
-    setValidated(true);
     console.log(member);
     let teamMember = {
       name: event.target.name.value,
