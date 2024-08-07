@@ -33,7 +33,7 @@ export default function Member() {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-      setAlertMessage('Some fields are required');
+      setAlertMessage("Some fields are required");
       setValidated(true);
       return;
     }
@@ -55,7 +55,9 @@ export default function Member() {
         })
         .catch((error) => {
           console.log(error);
-          let _error = error.response?.data?.message ? error.response.data.message : "Unknown Error"
+          let _error = error.response?.data?.message
+            ? error.response.data.message
+            : "Unknown Error";
           setAlertMessage(_error);
         });
     } else {
@@ -66,7 +68,9 @@ export default function Member() {
         })
         .catch((error) => {
           console.log(error);
-          let _error = error.response?.data?.message ? error.response.data.message : "Unknown Error"
+          let _error = error.response?.data?.message
+            ? error.response.data.message
+            : "Unknown Error";
           setAlertMessage(_error);
         });
     }
@@ -74,12 +78,12 @@ export default function Member() {
   const handleChange = (e) => {
     console.log(e.target.name);
     switch (e.target.name) {
-      case 'name':
+      case "name":
         setName(e.target.value);
         break;
-    
+
       default:
-        setMember({[e.target.name]:e.target.value});
+        setMember({ [e.target.name]: e.target.value });
         break;
     }
   };
@@ -126,6 +130,10 @@ export default function Member() {
             required
             onChange={handleChange}
           />
+
+          <Form.Control.Feedback type="invalid">
+            Name is required.
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
@@ -137,6 +145,9 @@ export default function Member() {
             name="email"
             required
           />
+          <Form.Control.Feedback type="invalid">
+            Email is required or invalid format.
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Phone Number</Form.Label>
@@ -148,6 +159,10 @@ export default function Member() {
             onChange={handleChange}
             required
           />
+
+          <Form.Control.Feedback type="invalid">
+            Phone Number is required and must be integer.
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.email">
           <Form.Label>Role</Form.Label>

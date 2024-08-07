@@ -43,7 +43,7 @@ function MemberItem({ member, onMemberChange }) {
       </div>
       <div className="ms-2 me-auto">
         <div className="fw-bold">
-          {member.name} {member.isAdmin === "1" ? "(admin)" : ""}
+          {member.name} {member.isAdmin === 1 ? "(admin)" : ""}
         </div>
         {member.phoneNumber}
         <br></br>
