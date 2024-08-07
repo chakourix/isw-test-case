@@ -55,7 +55,8 @@ export default function Member() {
         })
         .catch((error) => {
           console.log(error);
-          setAlertMessage(error.message ? error.message : "Unknown Error");
+          let _error = error.response?.data?.message ? error.response.data.message : "Unknown Error"
+          setAlertMessage(_error);
         });
     } else {
       axios
@@ -65,7 +66,8 @@ export default function Member() {
         })
         .catch((error) => {
           console.log(error);
-          setAlertMessage(error.message ? error.message : "Unknown Error");
+          let _error = error.response?.data?.message ? error.response.data.message : "Unknown Error"
+          setAlertMessage(_error);
         });
     }
   };
